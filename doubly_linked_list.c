@@ -145,18 +145,62 @@ void delete_at_end(){
     return;
 
 }
-
+void delete_at_value(int value){
+    if(isempty()){
+        printf("The list is empty\n");
+        return;
+    }
+    if(head==tail&&head->data==value){
+        printf("%d removed\n",head->data); 
+        free(head);
+        head=tail=NULL;
+        return;
+    }
+    struct Node* temp= head;
+    if(head->data==value){
+        head= head->next;
+        head->prev=NULL;
+        printf("%d removed\n",temp->data);
+        free(temp);
+        return;
+    }
+    
+    //find node
+    while(temp!=NULL&&temp->data!=value){
+        temp=temp->next;
+    }
+    //value not found
+    if(temp==NULL){
+        printf("Value not found\n");
+        return;
+    }
+    
+    
+    else if(temp->next==NULL){
+        tail=temp->prev;
+        tail->next=NULL;
+    }
+    else{
+        temp->prev->next=temp->next;
+        temp->next->prev=temp->prev;
+    }
+    printf("%d removed\n", temp->data);   
+    free(temp);
+}
 void main(){
     int value;
-    int choice;
+    int choice=0;
     int position;
     while(choice!=5){
 
         printf("Enter Your Choice\n");
-        printf("1 insert at beginning\n"
-        "2 to insert at the end\n3 to display\n4 to insert at a specific position\n5 to exit\n" 
-        "6 to search by value\n7 to delete at the beginning\n8 to delete at the end: ");
-        scanf("%d",&choice);
+        printf("1 Insert at beginning\n"
+        "2 To insert at the end\n3 To display\n4 To insert at a specific position\n5 To exit\n" 
+        "6 To search by value\n7 To delete at the beginning\n8 To delete at the end\n9 To delete by value: ");
+        if (scanf("%d",&choice)!=1){
+            printf("Invalid input, Enter a integer\n");
+            while (getchar() !='\n');
+        }
 
 
         switch (choice)
@@ -198,8 +242,13 @@ void main(){
         case 8:
             delete_at_end();
             break;
+        case 9:
+            printf("Enter the value to remove: ");
+            scanf("%d", &value);
+            delete_at_value(value);
+            break;
         default:
-            printf("Invalid option selected");
+            printf("Invalid option selected\n");
             break;
 
         }
